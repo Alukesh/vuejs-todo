@@ -9,6 +9,7 @@ const saveChange = ()=>{
     emit('changing');
     emit('changed', textLi.value, item)
 }
+    var date = new Date();
 
 </script>
 
@@ -16,19 +17,22 @@ const saveChange = ()=>{
 <template>
     <ul v-if="listArr.length" class="overflow-y-auto">
         <li class="flex items-center p-2 gap-4" >
+<!--            {{date.getDate() + ' ' + date.getMonth()}}-->
+
             <label class="w-60 flex items-center">
                 <input :checked="item.isDone" @change="emit('done', item)" value='skirt' class='list__checkbox' type="checkbox" />
                 <span class="new_checkbox"/>
                 <span v-if="!item.isChanging" class="mr-auto ml-4 w-52 inline-block leading-9"
-                          :class="{'text-amber-500': item.isImportant,'text-stone-400':item.isDone, 'underline':item.isImportant }">
+                          :class="{'text-amber-500': item.isImportant,'text-stone-400':item.isDone, 'underline':item.isImportant, 'line-through':item.isDeleted }">
                     {{item.text}}
                 </span>
-                <input v-else v-model="textLi" class="bg-green-300 border-b-cyan-900" type="search">
+                <input v-else v-model="textLi" class="bg-green-300 border-b-cyan-900 p-2 ml-2"
+                        type="search">
             </label>
 
             <button v-if="item.isChanging" @click="saveChange()" class="bg-green-300 rounded-lg p-2 w-12">{{textLi ? 'Save' : 'Keep'}}</button>
-            <button v-else @click="emit('changing')" class="bg-green-400 rounded-lg p-2 w-12">Edit</button>
-            <button @click="emit('important', item)" class="bg-red-500 rounded-lg p-2">Important</button>
+            <button v-else @click="emit('changing')" class="bg-green-400 rounded-lg p-2 w-12 hover:text-white duration-200">Edit</button>
+            <button @click="emit('important', item)" class="bg-red-500 rounded-lg p-2 hover:text-white duration-200">Important</button>
             <button @click="emit('remove',  item)">
                 <img src="https://img.icons8.com/ios/50/000000/delete-forever--v1.png"/>
             </button>
@@ -37,6 +41,9 @@ const saveChange = ()=>{
     <div v-else >
         no todo
     </div>
+
+
+
 
 <!--    <ul class="todo__list" >-->
 <!--        <li class="flex items-center p-2 gap-4" v-for="item in listArr.filter(li => li.isDone)">-->
